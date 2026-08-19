@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firefox-deployment
+  labels:
+    app: firefox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: firefox
+  template:
+    metadata:
+      labels:
+        app: firefox
+    spec:
+      containers:
+      - name: firefox-container
+        image: lscr.io/linuxserver/firefox:latest         #jlesage/firefox:latest  - origional
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: firefox-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 3000
+    targetPort: 3000
+  selector:
+    app: firefox
